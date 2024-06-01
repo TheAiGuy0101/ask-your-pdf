@@ -23,32 +23,28 @@ if 'responses' not in st.session_state:
     st.session_state.responses = []
 
 st.set_page_config(layout="wide")
-#col1, col2 = st.columns([1,2])
+
 
 def send_click():
     if st.session_state.user != '':
         prompt = st.session_state.user
         if prompt:
           docs = knowledge_base.similarity_search(prompt)
-       # llm = OpenAI()
+      
         llm = OpenAI(model="gpt-3.5-turbo-instruct",temperature=  0.7, max_tokens = 1000,openai_api_key=os.environ.get("OPENAI_API_KEY"))
         chain = load_qa_chain(llm, chain_type="stuff")
         
-        #llm_chain = jd_enhancer_template | llm
+       
         with get_openai_callback() as cb:
               response = chain.invoke({"input_documents": docs, "question" :prompt})
               #response = chain.run(input_documents=docs, question=prompt)
         st.session_state.prompts.append(prompt)
-        #data = json.loads(response)
-        #text = data["output_text"]
-        #st.write(data)
-        #st.write(response["output_text"])
+       
         st.session_state.responses.append(response["output_text"])
-        #return response["output_text"]
-
+       
 
 load_dotenv()
-# Left column: Upload PDF text
+
 st.header("Upload PDF Text")
 st.header("Ask your PDF 💬")
 
@@ -64,8 +60,6 @@ if pdf is not None:
     text += page.extract_text()
 
   #t1=f"""<font color='black'>{text}</fon>"""
-  #with col2:
-  #    html(t1, height=400, scrolling=True)
   
 
   # split into chunks

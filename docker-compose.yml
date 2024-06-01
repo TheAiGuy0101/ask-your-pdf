@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  docexplorer:
+    build: .
+    ports:
+      - "8601:8601"
+    volumes:
+      - .:/app
+    environment:
+      - OPENAI_API_KEY= <Your OPENAI API KEY>
